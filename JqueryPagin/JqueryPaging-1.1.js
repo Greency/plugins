@@ -1,22 +1,23 @@
 /*1.version:1.1,
  *2.基于Jquery的分页插件,
- *3.传输的数据类型默认为JSON
+ *3.ajax传输的数据类型默认为JSON
  *4.ajax提交方式默认为POST
  *5.使用本插件前请先引入Jquery
  */
 
 var Paging = function (option) {
-    var pagingThis,//记录上一页被点击的元素
-        paging,  //获取每一个li标签
-        currentPage = 1,  //当前页
-        displayPage = 0  //实际显示的页数 
+    var pagingThis,     //上一个被点击的元素
+        paging,     //获取每一个li标签
+        currentPage = 1,    //当前页
+        displayPage = 0     //实际显示的页数
 
+    //加载分页按钮
     this.show = function () {
         var _num = 0
         if (option.pages >= option.displayPage) {
-        	displayPage = option.displayPage
+            displayPage = option.displayPage
         } else {
-        	displayPage = option.pages
+            displayPage = option.pages
         }
         var html = "<li>首页</li>" + "<li>上一页</li>"
         for (var i = 1; i <= displayPage; i++) {
@@ -30,6 +31,7 @@ var Paging = function (option) {
         pagingThis = paging[2]
     }
 
+    //分页按钮样式的改变
     this.changeStyle = function (type, arg1) {
         var _index = 0,  //索引
             _num = 0
@@ -68,6 +70,8 @@ var Paging = function (option) {
             }
         }
         index = 0
+
+        //点击首页 和 尾页的特殊样式
         if (arg1 !== undefined) {
             $(pagingThis).css({"color": "black", "background": "rgba(0, 0, 0, .1)"})
             if (arg1 === 1) {
@@ -103,7 +107,6 @@ var Paging = function (option) {
                                 --currentPage
                                 _self.changeStyle("-")
                             }
-
                         } else if (_text === "下一页") {
                             if (currentPage < option.pages) {
                                 ++currentPage
@@ -128,21 +131,21 @@ var Paging = function (option) {
     }
 
     //绘制html
-    this.drawHtml = function(currentPage){
-    	option.data.currentPage = currentPage
-       $.ajax({
-            type: "post",
-            url: 'PHP/api.php',
-            dataType: 'json',
+    this.drawHtml = function (currentPage) {
+        option.data.currentPage = currentPage
+        $.ajax({
+            type: option.type,
+            url: option.url,
+            dataType: option.dataType,
             data: option.data,
             success: function (data) {
-            	option.drawHtml(data)
+                option.drawHtml(data)
             },
             error: function () {
                 alert("error");
             }
         })
-    	
+
     }
 
     this.init = function () {
