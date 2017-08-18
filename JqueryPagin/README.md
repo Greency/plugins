@@ -9,33 +9,28 @@
 ```
 2.HTML写法
 ```
-<table id="attendance-record-content" cellpadding="0" cellspacing="0"></table>
+<!-- 此标签用于存放分页的按钮-->
+<ul id="paging-wrapper"></ul>
 ```
 3.javascript写法
 ```
-//先写一个ajax方法
-$.ajax({
-    type: "post",
-    url: 'api.php',
-    dataType: 'json',
-    data: 'status=select&id=1&currentPage=1',
-    success: function (data) {
-        var html = "<tr><td>时间</td><td>地点</td><td>状态</td><td>查看</td></tr>",
-        pages = data.length
-        for (var i = 0; i < pages - 1; i++) {
-        html += "<tr><td>" + data[i]['time'] + "</td><td>" + data[i]['adress'] + "</td><td>" + data[i]['state'] + "</td><td>查看详情</td></tr>"
+//配置参数
+var option = {
+        id: '#paging-wrapper',
+        pages: ,  //总页数
+        displayPage: ,  //只显示多少页
+        type:,  //请求的类型
+        dataType:,  //返回的数据格式
+        url:,  //访问的地址
+        data:{},  //所传参数（默认已有currentPage参数,无需再添加）
+        drawHtml:function(data){
+                //data:请求返回的数据
+                //拼接显示
         }
-        $("#attendance-record-content").html(html)
-        var option = {
-            id: '#paging-wrapper',
-            pages: Math.ceil(data[pages - 1] / 8), //总页数
-            displayPage: 4, //只显示多少页
-            }
-            new Paging(option)
-        },
-    error: function () {
-         alert("error");
-        }
-    })
+}
+
+//调用分页插件
+new Paging(option)
+
 ```
-#未完待续。。。。。。
+
